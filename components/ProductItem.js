@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
-import Link from 'next/link';
-import React from 'react';
+import Link from "next/link";
+import React from "react";
 
 export default function ProductItem({ product, addToCartHandler }) {
   return (
@@ -21,13 +21,13 @@ export default function ProductItem({ product, addToCartHandler }) {
           </a>
         </Link>
         <p className="mb-2">{product.brand}</p>
-        <p>${product.price}</p>
+        <p>R${product.price}</p>
         <button
           className="primary-button"
           type="button"
           onClick={() => addToCartHandler(product)}
         >
-          Add to cart
+          Adicionar ao carrinho
         </button>
       </div>
     </div>

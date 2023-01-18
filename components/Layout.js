@@ -1,15 +1,15 @@
-import { signOut, useSession } from 'next-auth/react';
-import Head from 'next/head';
-import Link from 'next/link';
-import Cookies from 'js-cookie';
-import React, { useContext, useEffect, useState } from 'react';
-import { ToastContainer } from 'react-toastify';
-import { Menu } from '@headlessui/react';
-import 'react-toastify/dist/ReactToastify.css';
-import { Store } from '../utils/Store';
-import DropdownLink from './DropdownLink';
-import { useRouter } from 'next/router';
-import { SearchIcon } from '@heroicons/react/outline';
+import { Menu } from "@headlessui/react";
+import { SearchIcon } from "@heroicons/react/outline";
+import Cookies from "js-cookie";
+import { signOut, useSession } from "next-auth/react";
+import Head from "next/head";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { useContext, useEffect, useState } from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Store } from "../utils/Store";
+import DropdownLink from "./DropdownLink";
 
 export default function Layout({ title, children }) {
   const { status, data: session } = useSession();
@@ -22,12 +22,12 @@ export default function Layout({ title, children }) {
   }, [cart.cartItems]);
 
   const logoutClickHandler = () => {
-    Cookies.remove('cart');
-    dispatch({ type: 'CART_RESET' });
-    signOut({ callbackUrl: '/login' });
+    Cookies.remove("cart");
+    dispatch({ type: "CART_RESET" });
+    signOut({ callbackUrl: "/login" });
   };
 
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
 
   const router = useRouter();
   const submitHandler = (e) => {
@@ -38,7 +38,7 @@ export default function Layout({ title, children }) {
   return (
     <>
       <Head>
-        <title>{title ? title + ' - Amazona' : 'Amazona'}</title>
+        <title>{title ? title + " - Marreta" : "Marreta"}</title>
         <meta name="description" content="Ecommerce Website" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -49,7 +49,7 @@ export default function Layout({ title, children }) {
         <header>
           <nav className="flex h-12 items-center px-4 justify-between shadow-md">
             <Link href="/">
-              <a className="text-lg font-bold">amazona</a>
+              <a className="text-lg font-bold">Marreta</a>
             </Link>
             <form
               onSubmit={submitHandler}
@@ -59,7 +59,7 @@ export default function Layout({ title, children }) {
                 onChange={(e) => setQuery(e.target.value)}
                 type="text"
                 className="rounded-tr-none rounded-br-none p-1 text-sm   focus:ring-0"
-                placeholder="Search products"
+                placeholder="Procurar Produto"
               />
               <button
                 className="rounded rounded-tl-none rounded-bl-none bg-amber-300 p-1 text-sm dark:text-black"
@@ -72,17 +72,17 @@ export default function Layout({ title, children }) {
             <div>
               <Link href="/cart">
                 <a className="p-2">
-                  Cart
+                  Carrinho
                   {cartItemsCount > 0 && (
-                    <span className="ml-1 rounded-full bg-red-600 px-2 py-1 text-xs font-bold text-white">
+                    <span className="ml-1 rounded-full bg-green-600 px-2 py-1 text-xs font-bold text-white">
                       {cartItemsCount}
                     </span>
                   )}
                 </a>
               </Link>
 
-              {status === 'loading' ? (
-                'Loading'
+              {status === "loading" ? (
+                "Loading"
               ) : session?.user ? (
                 <Menu as="div" className="relative inline-block">
                   <Menu.Button className="text-blue-600">
@@ -91,7 +91,7 @@ export default function Layout({ title, children }) {
                   <Menu.Items className="absolute right-0 w-56 origin-top-right bg-white  shadow-lg ">
                     <Menu.Item>
                       <DropdownLink className="dropdown-link" href="/profile">
-                        Profile
+                        Perfil
                       </DropdownLink>
                     </Menu.Item>
                     <Menu.Item>
@@ -99,7 +99,7 @@ export default function Layout({ title, children }) {
                         className="dropdown-link"
                         href="/order-history"
                       >
-                        Order History
+                        Histórico de pedidos
                       </DropdownLink>
                     </Menu.Item>
                     {session.user.isAdmin && (
@@ -108,7 +108,7 @@ export default function Layout({ title, children }) {
                           className="dropdown-link"
                           href="/admin/dashboard"
                         >
-                          Admin Dashboard
+                          Painel Administrador
                         </DropdownLink>
                       </Menu.Item>
                     )}
@@ -118,7 +118,7 @@ export default function Layout({ title, children }) {
                         href="#"
                         onClick={logoutClickHandler}
                       >
-                        Logout
+                        Sair
                       </a>
                     </Menu.Item>
                   </Menu.Items>
@@ -133,7 +133,7 @@ export default function Layout({ title, children }) {
         </header>
         <main className="container m-auto mt-4 px-4">{children}</main>
         <footer className="flex h-10 justify-center items-center shadow-inner">
-          <p>Copyright © 2022 Amazona</p>
+          <p>Copyright © 2022 Marreta</p>
         </footer>
       </div>
     </>

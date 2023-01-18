@@ -1,28 +1,28 @@
-import axios from 'axios';
-import { useRouter } from 'next/router';
-import { useContext } from 'react';
-import { toast } from 'react-toastify';
-import Layout from '../components/Layout';
-import { Store } from '../utils/Store';
-import { XCircleIcon } from '@heroicons/react/outline';
-import ProductItem from '../components/ProductItem';
-import Product from '../models/Product';
-import db from '../utils/db';
+import { XCircleIcon } from "@heroicons/react/outline";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { useContext } from "react";
+import { toast } from "react-toastify";
+import Layout from "../components/Layout";
+import ProductItem from "../components/ProductItem";
+import Product from "../models/Product";
+import { Store } from "../utils/Store";
+import db from "../utils/db";
 
 const PAGE_SIZE = 2;
 
 const prices = [
   {
-    name: '$1 to $50',
-    value: '1-50',
+    name: "R$1 to R$50",
+    value: "1-50",
   },
   {
-    name: '$51 to $200',
-    value: '51-200',
+    name: "R$51 to R$200",
+    value: "51-200",
   },
   {
-    name: '$201 to $1000',
-    value: '201-1000',
+    name: "R$201 to R$1000",
+    value: "201-1000",
   },
 ];
 
@@ -32,12 +32,12 @@ export default function Search(props) {
   const router = useRouter();
 
   const {
-    query = 'all',
-    category = 'all',
-    brand = 'all',
-    price = 'all',
-    rating = 'all',
-    sort = 'featured',
+    query = "Todos",
+    category = "Todos",
+    brand = "Todos",
+    price = "Todos",
+    rating = "Todos",
+    sort = "featured",
     page = 1,
   } = router.query;
 
@@ -95,24 +95,24 @@ export default function Search(props) {
     const quantity = existItem ? existItem.quantity + 1 : 1;
     const { data } = await axios.get(`/api/products/${product._id}`);
     if (data.countInStock < quantity) {
-      toast.error('Sorry. Product is out of stock');
+      toast.error("Desculpa. O produto está esgotado");
       return;
     }
-    dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, quantity } });
-    router.push('/cart');
+    dispatch({ type: "CART_ADD_ITEM", payload: { ...product, quantity } });
+    router.push("/cart");
   };
   return (
     <Layout title="search">
       <div className="grid md:grid-cols-4 md:gap-5">
         <div>
           <div className="my-3">
-            <h2>Categories</h2>
+            <h2>Categorias</h2>
             <select
               className="w-full"
               value={category}
               onChange={categoryHandler}
             >
-              <option value="all">All</option>
+              <option value="Todos">Todos</option>
               {categories &&
                 categories.map((category) => (
                   <option key={category} value={category}>
@@ -122,9 +122,9 @@ export default function Search(props) {
             </select>
           </div>
           <div className="mb-3">
-            <h2>Brands</h2>
+            <h2>Marcas</h2>
             <select className="w-full" value={brand} onChange={brandHandler}>
-              <option value="all">All</option>
+              <option value="Todos">Todos</option>
               {brands &&
                 brands.map((brand) => (
                   <option key={brand} value={brand}>
@@ -134,9 +134,9 @@ export default function Search(props) {
             </select>
           </div>
           <div className="mb-3">
-            <h2>Prices</h2>
+            <h2>Preço</h2>
             <select className="w-full" value={price} onChange={priceHandler}>
-              <option value="all">All</option>
+              <option value="Todos">Todos</option>
               {prices &&
                 prices.map((price) => (
                   <option key={price.value} value={price.value}>
@@ -146,13 +146,13 @@ export default function Search(props) {
             </select>
           </div>
           <div className="mb-3">
-            <h2>Ratings</h2>
+            <h2>Avaliações</h2>
             <select className="w-full" value={rating} onChange={ratingHandler}>
-              <option value="all">All</option>
+              <option value="Todos">Todos</option>
               {ratings &&
                 ratings.map((rating) => (
                   <option key={rating} value={rating}>
-                    {rating} star{rating > 1 && 's'} & up
+                    {rating} star{rating > 1 && "s"} & up
                   </option>
                 ))}
             </select>
@@ -161,25 +161,25 @@ export default function Search(props) {
         <div className="md:col-span-3">
           <div className="mb-2 flex items-center justify-between border-b-2 pb-2">
             <div className="flex items-center">
-              {products.length === 0 ? 'No' : countProducts} Results
-              {query !== 'all' && query !== '' && ' : ' + query}
-              {category !== 'all' && ' : ' + category}
-              {brand !== 'all' && ' : ' + brand}
-              {price !== 'all' && ' : Price ' + price}
-              {rating !== 'all' && ' : Rating ' + rating + ' & up'}
+              {products.length === 0 ? "No" : countProducts} Results
+              {query !== "Todos" && query !== "" && " : " + query}
+              {category !== "Todos" && " : " + category}
+              {brand !== "Todos" && " : " + brand}
+              {price !== "Todos" && " : Price " + price}
+              {rating !== "Todos" && " : Rating " + rating + " & up"}
               &nbsp;
-              {(query !== 'all' && query !== '') ||
-              category !== 'all' ||
-              brand !== 'all' ||
-              rating !== 'all' ||
-              price !== 'all' ? (
-                <button onClick={() => router.push('/search')}>
+              {(query !== "Todos" && query !== "") ||
+              category !== "Todos" ||
+              brand !== "Todos" ||
+              rating !== "Todos" ||
+              price !== "Todos" ? (
+                <button onClick={() => router.push("/search")}>
                   <XCircleIcon className="h-5 w-5" />
                 </button>
               ) : null}
             </div>
             <div>
-              Sort by{' '}
+              Sort by{" "}
               <select value={sort} onChange={sortHandler}>
                 <option value="featured">Featured</option>
                 <option value="lowest">Price: Low to High</option>
@@ -205,7 +205,7 @@ export default function Search(props) {
                   <li key={pageNumber}>
                     <button
                       className={`default-button m-2 ${
-                        page == pageNumber + 1 ? 'font-bold' : ''
+                        page == pageNumber + 1 ? "font-bold" : ""
                       } `}
                       onClick={() => pageHandler(pageNumber + 1)}
                     >
@@ -224,26 +224,26 @@ export default function Search(props) {
 export async function getServerSideProps({ query }) {
   const pageSize = query.pageSize || PAGE_SIZE;
   const page = query.page || 1;
-  const category = query.category || '';
-  const brand = query.brand || '';
-  const price = query.price || '';
-  const rating = query.rating || '';
-  const sort = query.sort || '';
-  const searchQuery = query.query || '';
+  const category = query.category || "";
+  const brand = query.brand || "";
+  const price = query.price || "";
+  const rating = query.rating || "";
+  const sort = query.sort || "";
+  const searchQuery = query.query || "";
 
   const queryFilter =
-    searchQuery && searchQuery !== 'all'
+    searchQuery && searchQuery !== "Todos"
       ? {
           name: {
             $regex: searchQuery,
-            $options: 'i',
+            $options: "i",
           },
         }
       : {};
-  const categoryFilter = category && category !== 'all' ? { category } : {};
-  const brandFilter = brand && brand !== 'all' ? { brand } : {};
+  const categoryFilter = category && category !== "Todos" ? { category } : {};
+  const brandFilter = brand && brand !== "Todos" ? { brand } : {};
   const ratingFilter =
-    rating && rating !== 'all'
+    rating && rating !== "Todos"
       ? {
           rating: {
             $gte: Number(rating),
@@ -252,30 +252,30 @@ export async function getServerSideProps({ query }) {
       : {};
   // 10-50
   const priceFilter =
-    price && price !== 'all'
+    price && price !== "Todos"
       ? {
           price: {
-            $gte: Number(price.split('-')[0]),
-            $lte: Number(price.split('-')[1]),
+            $gte: Number(price.split("-")[0]),
+            $lte: Number(price.split("-")[1]),
           },
         }
       : {};
   const order =
-    sort === 'featured'
+    sort === "featured"
       ? { isFeatured: -1 }
-      : sort === 'lowest'
+      : sort === "lowest"
       ? { price: 1 }
-      : sort === 'highest'
+      : sort === "highest"
       ? { price: -1 }
-      : sort === 'toprated'
+      : sort === "toprated"
       ? { rating: -1 }
-      : sort === 'newest'
+      : sort === "newest"
       ? { createdAt: -1 }
       : { _id: -1 };
 
   await db.connect();
-  const categories = await Product.find().distinct('category');
-  const brands = await Product.find().distinct('brand');
+  const categories = await Product.find().distinct("category");
+  const brands = await Product.find().distinct("brand");
   const productDocs = await Product.find(
     {
       ...queryFilter,
@@ -284,7 +284,7 @@ export async function getServerSideProps({ query }) {
       ...brandFilter,
       ...ratingFilter,
     },
-    '-reviews'
+    "-reviews"
   )
     .sort(order)
     .skip(pageSize * (page - 1))

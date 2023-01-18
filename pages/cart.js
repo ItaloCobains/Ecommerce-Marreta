@@ -28,7 +28,7 @@ function CartScreen() {
     toast.success("Produto atualizado no carrinho");
   };
   return (
-    <Layout title="Shopping Cart">
+    <Layout title="Carrinho">
       <h1 className="mb-4 text-xl">Carrinho de compras</h1>
       {cartItems.length === 0 ? (
         <div>

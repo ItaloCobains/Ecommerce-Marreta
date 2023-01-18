@@ -1,19 +1,19 @@
-import axios from 'axios';
-import Link from 'next/link';
-import { Bar } from 'react-chartjs-2';
+import axios from "axios";
+import Link from "next/link";
+import { Bar } from "react-chartjs-2";
 
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
   BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
   Title,
   Tooltip,
-  Legend,
-} from 'chart.js';
-import React, { useEffect, useReducer } from 'react';
-import Layout from '../../components/Layout';
-import { getError } from '../../utils/error';
+} from "chart.js";
+import React, { useEffect, useReducer } from "react";
+import Layout from "../../components/Layout";
+import { getError } from "../../utils/error";
 
 ChartJS.register(
   CategoryScale,
@@ -28,18 +28,18 @@ export const options = {
   responsive: true,
   plugins: {
     legend: {
-      position: 'top',
+      position: "top",
     },
   },
 };
 
 function reducer(state, action) {
   switch (action.type) {
-    case 'FETCH_REQUEST':
-      return { ...state, loading: true, error: '' };
-    case 'FETCH_SUCCESS':
-      return { ...state, loading: false, summary: action.payload, error: '' };
-    case 'FETCH_FAIL':
+    case "FETCH_REQUEST":
+      return { ...state, loading: true, error: "" };
+    case "FETCH_SUCCESS":
+      return { ...state, loading: false, summary: action.payload, error: "" };
+    case "FETCH_FAIL":
       return { ...state, loading: false, error: action.payload };
     default:
       state;
@@ -49,17 +49,17 @@ function AdminDashboardScreen() {
   const [{ loading, error, summary }, dispatch] = useReducer(reducer, {
     loading: true,
     summary: { salesData: [] },
-    error: '',
+    error: "",
   });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        dispatch({ type: 'FETCH_REQUEST' });
+        dispatch({ type: "FETCH_REQUEST" });
         const { data } = await axios.get(`/api/admin/summary`);
-        dispatch({ type: 'FETCH_SUCCESS', payload: data });
+        dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
-        dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
+        dispatch({ type: "FETCH_FAIL", payload: getError(err) });
       }
     };
 
@@ -70,14 +70,14 @@ function AdminDashboardScreen() {
     labels: summary.salesData.map((x) => x._id), // 2022/01 2022/03
     datasets: [
       {
-        label: 'Sales',
-        backgroundColor: 'rgba(162, 222, 208, 1)',
+        label: "Sales",
+        backgroundColor: "rgba(162, 222, 208, 1)",
         data: summary.salesData.map((x) => x.totalSales),
       },
     ],
   };
   return (
-    <Layout title="Admin Dashboard">
+    <Layout title="Painel Administrativo">
       <div className="grid  md:grid-cols-4 md:gap-5">
         <div>
           <ul>
@@ -87,18 +87,18 @@ function AdminDashboardScreen() {
               </Link>
             </li>
             <li>
-              <Link href="/admin/orders">Orders</Link>
+              <Link href="/admin/orders">Pedidos</Link>
             </li>
             <li>
-              <Link href="/admin/products">Products</Link>
+              <Link href="/admin/products">Produtos</Link>
             </li>
             <li>
-              <Link href="/admin/users">Users</Link>
+              <Link href="/admin/users">User</Link>
             </li>
           </ul>
         </div>
         <div className="md:col-span-3">
-          <h1 className="mb-4 text-xl">Admin Dashboard</h1>
+          <h1 className="mb-4 text-xl">Painel Administrativo</h1>
           {loading ? (
             <div>Loading...</div>
           ) : error ? (
@@ -108,29 +108,29 @@ function AdminDashboardScreen() {
               <div className="grid grid-cols-1 md:grid-cols-4">
                 <div className="card m-5 p-5">
                   <p className="text-3xl">${summary.ordersPrice} </p>
-                  <p>Sales</p>
-                  <Link href="/admin/orders">View sales</Link>
+                  <p>Vendas</p>
+                  <Link href="/admin/orders">Ver vendas</Link>
                 </div>
                 <div className="card m-5 p-5">
                   <p className="text-3xl">{summary.ordersCount} </p>
-                  <p>Orders</p>
-                  <Link href="/admin/orders">View orders</Link>
+                  <p>Pedidos</p>
+                  <Link href="/admin/orders">Ver pedidos</Link>
                 </div>
                 <div className="card m-5 p-5">
                   <p className="text-3xl">{summary.productsCount} </p>
-                  <p>Products</p>
-                  <Link href="/admin/products">View products</Link>
+                  <p>Produtos</p>
+                  <Link href="/admin/products">Ver produtos</Link>
                 </div>
                 <div className="card m-5 p-5">
                   <p className="text-3xl">{summary.usersCount} </p>
-                  <p>Users</p>
-                  <Link href="/admin/users">View users</Link>
+                  <p>Usuarios</p>
+                  <Link href="/admin/users">Ver usuarios</Link>
                 </div>
               </div>
-              <h2 className="text-xl">Sales Report</h2>
+              <h2 className="text-xl">Tabela de vendas</h2>
               <Bar
                 options={{
-                  legend: { display: true, position: 'right' },
+                  legend: { display: true, position: "right" },
                 }}
                 data={data}
               />

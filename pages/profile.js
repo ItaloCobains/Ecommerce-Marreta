@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
-import { signIn, useSession } from 'next-auth/react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
-import { getError } from '../utils/error';
-import axios from 'axios';
-import Layout from '../components/Layout';
+import axios from "axios";
+import { signIn, useSession } from "next-auth/react";
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import Layout from "../components/Layout";
+import { getError } from "../utils/error";
 
 export default function ProfileScreen() {
   const { data: session } = useSession();
@@ -18,23 +18,23 @@ export default function ProfileScreen() {
   } = useForm();
 
   useEffect(() => {
-    setValue('name', session.user.name);
-    setValue('email', session.user.email);
+    setValue("name", session.user.name);
+    setValue("email", session.user.email);
   }, [session.user, setValue]);
 
   const submitHandler = async ({ name, email, password }) => {
     try {
-      await axios.put('/api/auth/update', {
+      await axios.put("/api/auth/update", {
         name,
         email,
         password,
       });
-      const result = await signIn('credentials', {
+      const result = await signIn("credentials", {
         redirect: false,
         email,
         password,
       });
-      toast.success('Profile updated successfully');
+      toast.success("Perfil atualizado com sucesso");
       if (result.error) {
         toast.error(result.error);
       }
@@ -44,22 +44,22 @@ export default function ProfileScreen() {
   };
 
   return (
-    <Layout title="Profile">
+    <Layout title="Perfil">
       <form
         className="mx-auto max-w-screen-md"
         onSubmit={handleSubmit(submitHandler)}
       >
-        <h1 className="mb-4 text-xl">Update Profile</h1>
+        <h1 className="mb-4 text-xl">Atualizar Perfil</h1>
 
         <div className="mb-4">
-          <label htmlFor="name">Name</label>
+          <label htmlFor="name">Nome</label>
           <input
             type="text"
             className="w-full"
             id="name"
             autoFocus
-            {...register('name', {
-              required: 'Please enter name',
+            {...register("name", {
+              required: "Por favor insira o nome",
             })}
           />
           {errors.name && (
@@ -73,11 +73,11 @@ export default function ProfileScreen() {
             type="email"
             className="w-full"
             id="email"
-            {...register('email', {
-              required: 'Please enter email',
+            {...register("email", {
+              required: "Por favor insira o email",
               pattern: {
                 value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/i,
-                message: 'Please enter valid email',
+                message: "Por favor insira um email válido",
               },
             })}
           />
@@ -87,13 +87,16 @@ export default function ProfileScreen() {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password">Senha</label>
           <input
             className="w-full"
             type="password"
             id="password"
-            {...register('password', {
-              minLength: { value: 6, message: 'password is more than 5 chars' },
+            {...register("password", {
+              minLength: {
+                value: 6,
+                message: "Senha deve ter mais que 5 caracteres",
+              },
             })}
           />
           {errors.password && (
@@ -102,16 +105,16 @@ export default function ProfileScreen() {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="confirmPassword">Confirm Password</label>
+          <label htmlFor="confirmPassword">Corfirmar Senha</label>
           <input
             className="w-full"
             type="password"
             id="confirmPassword"
-            {...register('confirmPassword', {
-              validate: (value) => value === getValues('password'),
+            {...register("confirmPassword", {
+              validate: (value) => value === getValues("password"),
               minLength: {
                 value: 6,
-                message: 'confirm password is more than 5 chars',
+                message: "Senha deve ter mais que 5 caracteres",
               },
             })}
           />
@@ -121,12 +124,12 @@ export default function ProfileScreen() {
             </div>
           )}
           {errors.confirmPassword &&
-            errors.confirmPassword.type === 'validate' && (
-              <div className="text-red-500 ">Password do not match</div>
+            errors.confirmPassword.type === "validate" && (
+              <div className="text-red-500 ">Senha não confere</div>
             )}
         </div>
         <div className="mb-4">
-          <button className="primary-button">Update Profile</button>
+          <button className="primary-button">Atualizar Perfil</button>
         </div>
       </form>
     </Layout>

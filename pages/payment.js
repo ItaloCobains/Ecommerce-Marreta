@@ -1,13 +1,13 @@
-import { useRouter } from 'next/router';
-import React, { useContext, useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
-import Cookies from 'js-cookie';
-import CheckoutWizard from '../components/CheckoutWizard';
-import Layout from '../components/Layout';
-import { Store } from '../utils/Store';
+import Cookies from "js-cookie";
+import { useRouter } from "next/router";
+import React, { useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import CheckoutWizard from "../components/CheckoutWizard";
+import Layout from "../components/Layout";
+import { Store } from "../utils/Store";
 
 export default function PaymentScreen() {
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
 
   const { state, dispatch } = useContext(Store);
   const { cart } = state;
@@ -18,32 +18,37 @@ export default function PaymentScreen() {
   const submitHandler = (e) => {
     e.preventDefault();
     if (!selectedPaymentMethod) {
-      return toast.error('Payment method is required');
+      return toast.error("O método de pagamento é obrigatório");
     }
-    dispatch({ type: 'SAVE_PAYMENT_METHOD', payload: selectedPaymentMethod });
+    dispatch({ type: "SAVE_PAYMENT_METHOD", payload: selectedPaymentMethod });
     Cookies.set(
-      'cart',
+      "cart",
       JSON.stringify({
         ...cart,
         paymentMethod: selectedPaymentMethod,
       })
     );
 
-    router.push('/placeorder');
+    router.push("/placeorder");
   };
   useEffect(() => {
     if (!shippingAddress.address) {
-      return router.push('/shipping');
+      return router.push("/shipping");
     }
-    setSelectedPaymentMethod(paymentMethod || '');
+    setSelectedPaymentMethod(paymentMethod || "");
   }, [paymentMethod, router, shippingAddress.address]);
 
   return (
-    <Layout title="Payment Method">
+    <Layout title="Forma de pagamento">
       <CheckoutWizard activeStep={2} />
       <form className="mx-auto max-w-screen-md" onSubmit={submitHandler}>
-        <h1 className="mb-4 text-xl">Payment Method</h1>
-        {['PayPal', 'Stripe', 'CashOnDelivery'].map((payment) => (
+        <h1 className="mb-4 text-xl">Forma de pagamento</h1>
+        {[
+          "PayPal",
+          "Cartão de credito",
+          "Pagamento em dinheiro na entrega",
+          "PIX",
+        ].map((payment) => (
           <div key={payment} className="mb-4">
             <input
               name="paymentMethod"
@@ -61,13 +66,13 @@ export default function PaymentScreen() {
         ))}
         <div className="mb-4 flex justify-between">
           <button
-            onClick={() => router.push('/shipping')}
+            onClick={() => router.push("/shipping")}
             type="button"
             className="default-button"
           >
-            Back
+            Voltar
           </button>
-          <button className="primary-button">Next</button>
+          <button className="primary-button">Próximo</button>
         </div>
       </form>
     </Layout>

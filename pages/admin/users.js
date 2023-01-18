@@ -1,26 +1,26 @@
-import axios from 'axios';
-import Link from 'next/link';
-import React, { useEffect, useReducer } from 'react';
-import { toast } from 'react-toastify';
-import Layout from '../../components/Layout';
-import { getError } from '../../utils/error';
+import axios from "axios";
+import Link from "next/link";
+import React, { useEffect, useReducer } from "react";
+import { toast } from "react-toastify";
+import Layout from "../../components/Layout";
+import { getError } from "../../utils/error";
 
 function reducer(state, action) {
   switch (action.type) {
-    case 'FETCH_REQUEST':
-      return { ...state, loading: true, error: '' };
-    case 'FETCH_SUCCESS':
-      return { ...state, loading: false, users: action.payload, error: '' };
-    case 'FETCH_FAIL':
+    case "FETCH_REQUEST":
+      return { ...state, loading: true, error: "" };
+    case "FETCH_SUCCESS":
+      return { ...state, loading: false, users: action.payload, error: "" };
+    case "FETCH_FAIL":
       return { ...state, loading: false, error: action.payload };
 
-    case 'DELETE_REQUEST':
+    case "DELETE_REQUEST":
       return { ...state, loadingDelete: true };
-    case 'DELETE_SUCCESS':
+    case "DELETE_SUCCESS":
       return { ...state, loadingDelete: false, successDelete: true };
-    case 'DELETE_FAIL':
+    case "DELETE_FAIL":
       return { ...state, loadingDelete: false };
-    case 'DELETE_RESET':
+    case "DELETE_RESET":
       return { ...state, loadingDelete: false, successDelete: false };
     default:
       return state;
@@ -32,43 +32,43 @@ function AdminUsersScreen() {
     useReducer(reducer, {
       loading: true,
       users: [],
-      error: '',
+      error: "",
     });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        dispatch({ type: 'FETCH_REQUEST' });
+        dispatch({ type: "FETCH_REQUEST" });
         const { data } = await axios.get(`/api/admin/users`);
-        dispatch({ type: 'FETCH_SUCCESS', payload: data });
+        dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
-        dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
+        dispatch({ type: "FETCH_FAIL", payload: getError(err) });
       }
     };
     if (successDelete) {
-      dispatch({ type: 'DELETE_RESET' });
+      dispatch({ type: "DELETE_RESET" });
     } else {
       fetchData();
     }
   }, [successDelete]);
 
   const deleteHandler = async (userId) => {
-    if (!window.confirm('Are you sure?')) {
+    if (!window.confirm("Tem certeza ?")) {
       return;
     }
     try {
-      dispatch({ type: 'DELETE_REQUEST' });
+      dispatch({ type: "DELETE_REQUEST" });
       await axios.delete(`/api/admin/users/${userId}`);
-      dispatch({ type: 'DELETE_SUCCESS' });
-      toast.success('User deleted successfully');
+      dispatch({ type: "DELETE_SUCCESS" });
+      toast.success("Usuario deletado com sucesso");
     } catch (err) {
-      dispatch({ type: 'DELETE_FAIL' });
+      dispatch({ type: "DELETE_FAIL" });
       toast.error(getError(err));
     }
   };
 
   return (
-    <Layout title="Users">
+    <Layout title="Usuarios">
       <div className="grid md:grid-cols-4 md:gap-5">
         <div>
           <ul>
@@ -76,21 +76,21 @@ function AdminUsersScreen() {
               <Link href="/admin/dashboard">Dashboard</Link>
             </li>
             <li>
-              <Link href="/admin/orders">Orders</Link>
+              <Link href="/admin/orders">Pedidos</Link>
             </li>
             <li>
-              <Link href="/admin/products">Products</Link>
+              <Link href="/admin/products">Produtos</Link>
             </li>
             <li>
               <Link href="/admin/users">
-                <a className="font-bold">Users</a>
+                <a className="font-bold">Usuarios</a>
               </Link>
             </li>
           </ul>
         </div>
         <div className="overflow-x-auto md:col-span-3">
-          <h1 className="mb-4 text-xl">Users</h1>
-          {loadingDelete && <div>Deleting...</div>}
+          <h1 className="mb-4 text-xl">Usuarios</h1>
+          {loadingDelete && <div>Deletando...</div>}
           {loading ? (
             <div>Loading...</div>
           ) : error ? (
@@ -101,10 +101,10 @@ function AdminUsersScreen() {
                 <thead className="border-b">
                   <tr>
                     <th className="px-5 text-left">ID</th>
-                    <th className="p-5 text-left">NAME</th>
+                    <th className="p-5 text-left">NOME</th>
                     <th className="p-5 text-left">EMAIL</th>
                     <th className="p-5 text-left">ADMIN</th>
-                    <th className="p-5 text-left">ACTIONS</th>
+                    <th className="p-5 text-left">AÇÕES</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -113,11 +113,11 @@ function AdminUsersScreen() {
                       <td className=" p-5 ">{user._id.substring(20, 24)}</td>
                       <td className=" p-5 ">{user.name}</td>
                       <td className=" p-5 ">{user.email}</td>
-                      <td className=" p-5 ">{user.isAdmin ? 'YES' : 'NO'}</td>
+                      <td className=" p-5 ">{user.isAdmin ? "SIM" : "NÃO"}</td>
                       <td className=" p-5 ">
                         <Link href={`/admin/user/${user._id}`} passHref>
                           <a type="button" className="default-button">
-                            Edit
+                            Editar
                           </a>
                         </Link>
                         &nbsp;
@@ -126,7 +126,7 @@ function AdminUsersScreen() {
                           className="default-button"
                           onClick={() => deleteHandler(user._id)}
                         >
-                          Delete
+                          Deletar
                         </button>
                       </td>
                     </tr>

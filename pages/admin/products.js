@@ -1,32 +1,32 @@
-import axios from 'axios';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React, { useEffect, useReducer } from 'react';
-import { toast } from 'react-toastify';
-import Layout from '../../components/Layout';
-import { getError } from '../../utils/error';
+import axios from "axios";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { useEffect, useReducer } from "react";
+import { toast } from "react-toastify";
+import Layout from "../../components/Layout";
+import { getError } from "../../utils/error";
 
 function reducer(state, action) {
   switch (action.type) {
-    case 'FETCH_REQUEST':
-      return { ...state, loading: true, error: '' };
-    case 'FETCH_SUCCESS':
-      return { ...state, loading: false, products: action.payload, error: '' };
-    case 'FETCH_FAIL':
+    case "FETCH_REQUEST":
+      return { ...state, loading: true, error: "" };
+    case "FETCH_SUCCESS":
+      return { ...state, loading: false, products: action.payload, error: "" };
+    case "FETCH_FAIL":
       return { ...state, loading: false, error: action.payload };
-    case 'CREATE_REQUEST':
+    case "CREATE_REQUEST":
       return { ...state, loadingCreate: true };
-    case 'CREATE_SUCCESS':
+    case "CREATE_SUCCESS":
       return { ...state, loadingCreate: false };
-    case 'CREATE_FAIL':
+    case "CREATE_FAIL":
       return { ...state, loadingCreate: false };
-    case 'DELETE_REQUEST':
+    case "DELETE_REQUEST":
       return { ...state, loadingDelete: true };
-    case 'DELETE_SUCCESS':
+    case "DELETE_SUCCESS":
       return { ...state, loadingDelete: false, successDelete: true };
-    case 'DELETE_FAIL':
+    case "DELETE_FAIL":
       return { ...state, loadingDelete: false };
-    case 'DELETE_RESET':
+    case "DELETE_RESET":
       return { ...state, loadingDelete: false, successDelete: false };
 
     default:
@@ -42,53 +42,53 @@ export default function AdminProdcutsScreen() {
   ] = useReducer(reducer, {
     loading: true,
     products: [],
-    error: '',
+    error: "",
   });
 
   const createHandler = async () => {
-    if (!window.confirm('Are you sure?')) {
+    if (!window.confirm("Tem certeza ?")) {
       return;
     }
     try {
-      dispatch({ type: 'CREATE_REQUEST' });
+      dispatch({ type: "CREATE_REQUEST" });
       const { data } = await axios.post(`/api/admin/products`);
-      dispatch({ type: 'CREATE_SUCCESS' });
-      toast.success('Product created successfully');
+      dispatch({ type: "CREATE_SUCCESS" });
+      toast.success("Produto criado com sucesso!");
       router.push(`/admin/product/${data.product._id}`);
     } catch (err) {
-      dispatch({ type: 'CREATE_FAIL' });
+      dispatch({ type: "CREATE_FAIL" });
       toast.error(getError(err));
     }
   };
   useEffect(() => {
     const fetchData = async () => {
       try {
-        dispatch({ type: 'FETCH_REQUEST' });
+        dispatch({ type: "FETCH_REQUEST" });
         const { data } = await axios.get(`/api/admin/products`);
-        dispatch({ type: 'FETCH_SUCCESS', payload: data });
+        dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
-        dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
+        dispatch({ type: "FETCH_FAIL", payload: getError(err) });
       }
     };
 
     if (successDelete) {
-      dispatch({ type: 'DELETE_RESET' });
+      dispatch({ type: "DELETE_RESET" });
     } else {
       fetchData();
     }
   }, [successDelete]);
 
   const deleteHandler = async (productId) => {
-    if (!window.confirm('Are you sure?')) {
+    if (!window.confirm("Tem certeza ?")) {
       return;
     }
     try {
-      dispatch({ type: 'DELETE_REQUEST' });
+      dispatch({ type: "DELETE_REQUEST" });
       await axios.delete(`/api/admin/products/${productId}`);
-      dispatch({ type: 'DELETE_SUCCESS' });
-      toast.success('Product deleted successfully');
+      dispatch({ type: "DELETE_SUCCESS" });
+      toast.success("Produto deletado com sucesso!");
     } catch (err) {
-      dispatch({ type: 'DELETE_FAIL' });
+      dispatch({ type: "DELETE_FAIL" });
       toast.error(getError(err));
     }
   };
@@ -101,28 +101,28 @@ export default function AdminProdcutsScreen() {
               <Link href="/admin/dashboard">Dashboard</Link>
             </li>
             <li>
-              <Link href="/admin/orders">Orders</Link>
+              <Link href="/admin/orders">Pedidos</Link>
             </li>
             <li>
               <Link href="/admin/products">
-                <a className="font-bold">Products</a>
+                <a className="font-bold">Produtos</a>
               </Link>
             </li>
             <li>
-              <Link href="/admin/users">Users</Link>
+              <Link href="/admin/users">Usuarios</Link>
             </li>
           </ul>
         </div>
         <div className="overflow-x-auto md:col-span-3">
           <div className="flex justify-between">
-            <h1 className="mb-4 text-xl">Products</h1>
-            {loadingDelete && <div>Deleting item...</div>}
+            <h1 className="mb-4 text-xl">Produtos</h1>
+            {loadingDelete && <div>Deletando item...</div>}
             <button
               disabled={loadingCreate}
               onClick={createHandler}
               className="primary-button"
             >
-              {loadingCreate ? 'Loading' : 'Create'}
+              {loadingCreate ? "Loading" : "Criar"}
             </button>
           </div>
           {loading ? (
@@ -135,12 +135,12 @@ export default function AdminProdcutsScreen() {
                 <thead className="border-b">
                   <tr>
                     <th className="px-5 text-left">ID</th>
-                    <th className="p-5 text-left">NAME</th>
-                    <th className="p-5 text-left">PRICE</th>
-                    <th className="p-5 text-left">CATEGORY</th>
-                    <th className="p-5 text-left">COUNT</th>
-                    <th className="p-5 text-left">RATING</th>
-                    <th className="p-5 text-left">ACTIONS</th>
+                    <th className="p-5 text-left">NOME</th>
+                    <th className="p-5 text-left">PREÇO</th>
+                    <th className="p-5 text-left">CATEGORIAS</th>
+                    <th className="p-5 text-left">QUANTIDADE</th>
+                    <th className="p-5 text-left">AVALIAÇÃO</th>
+                    <th className="p-5 text-left">AÇÕES</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -155,7 +155,7 @@ export default function AdminProdcutsScreen() {
                       <td className=" p-5 ">
                         <Link href={`/admin/product/${product._id}`}>
                           <a type="button" className="default-button">
-                            Edit
+                            Editar
                           </a>
                         </Link>
                         &nbsp;
@@ -164,7 +164,7 @@ export default function AdminProdcutsScreen() {
                           className="default-button"
                           type="button"
                         >
-                          Delete
+                          Deletar
                         </button>
                       </td>
                     </tr>
