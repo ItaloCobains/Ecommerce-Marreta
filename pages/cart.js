@@ -1,13 +1,13 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import React, { useContext } from 'react';
-import { XCircleIcon } from '@heroicons/react/outline';
-import Layout from '../components/Layout';
-import { Store } from '../utils/Store';
-import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
-import axios from 'axios';
-import { toast } from 'react-toastify';
+import { XCircleIcon } from "@heroicons/react/outline";
+import axios from "axios";
+import dynamic from "next/dynamic";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { useContext } from "react";
+import { toast } from "react-toastify";
+import Layout from "../components/Layout";
+import { Store } from "../utils/Store";
 
 function CartScreen() {
   const router = useRouter();
@@ -16,23 +16,23 @@ function CartScreen() {
     cart: { cartItems },
   } = state;
   const removeItemHandler = (item) => {
-    dispatch({ type: 'CART_REMOVE_ITEM', payload: item });
+    dispatch({ type: "CART_REMOVE_ITEM", payload: item });
   };
   const updateCartHandler = async (item, qty) => {
     const quantity = Number(qty);
     const { data } = await axios.get(`/api/products/${item._id}`);
     if (data.countInStock < quantity) {
-      return toast.error('Sorry. Product is out of stock');
+      return toast.error("Desculpa. O produto está esgotado");
     }
-    dispatch({ type: 'CART_ADD_ITEM', payload: { ...item, quantity } });
-    toast.success('Product updated in the cart');
+    dispatch({ type: "CART_ADD_ITEM", payload: { ...item, quantity } });
+    toast.success("Produto atualizado no carrinho");
   };
   return (
     <Layout title="Shopping Cart">
-      <h1 className="mb-4 text-xl">Shopping Cart</h1>
+      <h1 className="mb-4 text-xl">Carrinho de compras</h1>
       {cartItems.length === 0 ? (
         <div>
-          Cart is empty. <Link href="/">Go shopping</Link>
+          Carrinho esta vazio. <Link href="/">Vai fazer compras</Link>
         </div>
       ) : (
         <div className="grid md:grid-cols-4 md:gap-5">
@@ -41,9 +41,9 @@ function CartScreen() {
               <thead className="border-b">
                 <tr>
                   <th className="p-5 text-left">Item</th>
-                  <th className="p-5 text-right">Quantity</th>
-                  <th className="p-5 text-right">Price</th>
-                  <th className="p-5">Action</th>
+                  <th className="p-5 text-right">Quantidade</th>
+                  <th className="p-5 text-right">Preço</th>
+                  <th className="p-5">Remover</th>
                 </tr>
               </thead>
               <tbody>
@@ -77,7 +77,7 @@ function CartScreen() {
                         ))}
                       </select>
                     </td>
-                    <td className="p-5 text-right">${item.price}</td>
+                    <td className="p-5 text-right">R${item.price}</td>
                     <td className="p-5 text-center">
                       <button onClick={() => removeItemHandler(item)}>
                         <XCircleIcon className="h-5 w-5"></XCircleIcon>
@@ -92,16 +92,17 @@ function CartScreen() {
             <ul>
               <li>
                 <div className="pb-3 text-xl">
-                  Subtotal ({cartItems.reduce((a, c) => a + c.quantity, 0)}) : $
+                  Subtotal ({cartItems.reduce((a, c) => a + c.quantity, 0)}) :
+                  R$
                   {cartItems.reduce((a, c) => a + c.quantity * c.price, 0)}
                 </div>
               </li>
               <li>
                 <button
-                  onClick={() => router.push('login?redirect=/shipping')}
+                  onClick={() => router.push("login?redirect=/shipping")}
                   className="primary-button w-full"
                 >
-                  Check Out
+                  Ir para o pagamento
                 </button>
               </li>
             </ul>
