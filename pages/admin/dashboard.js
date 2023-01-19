@@ -93,7 +93,7 @@ function AdminDashboardScreen() {
               <Link href="/admin/products">Produtos</Link>
             </li>
             <li>
-              <Link href="/admin/users">User</Link>
+              <Link href="/admin/users">Usuarios</Link>
             </li>
           </ul>
         </div>
@@ -107,7 +107,7 @@ function AdminDashboardScreen() {
             <div>
               <div className="grid grid-cols-1 md:grid-cols-4">
                 <div className="card m-5 p-5">
-                  <p className="text-3xl">${summary.ordersPrice} </p>
+                  <p className="text-3xl">R$ {summary.ordersPrice} </p>
                   <p>Vendas</p>
                   <Link href="/admin/orders">Ver vendas</Link>
                 </div>
